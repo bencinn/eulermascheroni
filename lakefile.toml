@@ -1,5 +1,6 @@
 name = "EulerMascheroni"
 defaultTargets = ["EulerMascheroni"]
+lintDriver = "batteries/runLinter"
 
 [leanOptions]
 pp.unicode.fun = true
