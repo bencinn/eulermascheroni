@@ -13,6 +13,10 @@
   $\frac{1}{n} - \ln{\frac{n+1}{n}} \geq 0$ for all $n$ greater than zero.
 \end{lemma}
 
+\begin{proof}
+  Since $\ln x \leq x - 1$ for all $x$ greater than $0$ (see "log_le_sub_one_of_pos" in mathlib4), and $\frac{n+1}{n} \gt 0$ for all $n$ greater than $0$, we can rewrite as $\frac{1}{n} \geq \ln{\frac{n+1}{n}} \geq \frac{n+1}{n} - 1 = \frac{1}{n}$.
+\end{proof}
+
 \begin{lemma}[Partial sum of the infinite sum]
   \label{lem:eulerMascheroni_tsum_partial}
   \lean{eulerMascheroni_sum_partial}
@@ -20,13 +24,17 @@
   $\sum^{N}_{n=1}{\left(\frac{1}{n} - \ln{\frac{n+1}{n}}\right)} = H_n - \ln{\left( N+1 \right)}$ for all $N$ greater than 0
 \end{lemma}
 
+\begin{proof}
+  We can separate the sum into $\sum^{N}_{n=1}{\frac{1}{n}}$ (which is $H_n$) and $-\sum^{N}_{n=1}{\left(\ln{\frac{n+1}{n}}\right)} = -\sum^{N}_{n=1}{\ln{n+1} - \ln{n}}$, which is a telescopic sum that results in $-(\ln{N+1} - \ln{1}) = -\ln{N+1}$.
+\end{proof}
+
 \begin{theorem}[Sondow 2005 (2) (Infinite sum)]
   \label{thm:eulerMascheroni_tsum}
   \lean{eulerMascheroni_tsum}
   \uses{lem:eulerMascheroni_inner_nonneg, lem:eulerMascheroni_tsum_partial}
   \leanok
   $$
-  \gamma = \sum^{\infty}_{n=1}{\left(\frac{1}{n} - \ln{\frac{n+1}{n}}\right)}
+  \gamma = \lim_{n \to \infty}{H_n - \ln{n}} = \sum^{\infty}_{n=1}{\left(\frac{1}{n} - \ln{\frac{n+1}{n}}\right)}
   $$
   (Note: in the lean definition we shift the $n$ in the inner sum $\frac{1}{n} - \ln{\frac{n+1}{n}}$ by one so we can sum from $n=0$ to $\infty$
 \end{theorem}
