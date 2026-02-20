@@ -18,7 +18,7 @@ open Filter
 
 /-- Inner sum of the infinite sum definition -/
 noncomputable def eulerMascheroni_sum_inner (n : ℕ) :=
-  1 / ((n + 1) : ℝ) - Real.log ((n + 2) / (n + 1))
+  1 / (n + 1) - Real.log ((n + 2) / (n + 1))
 
 lemma eulerMascheroni_sum_inner_nonneg : ∀ n, 0 ≤ eulerMascheroni_sum_inner n := by
   intro n
@@ -37,7 +37,7 @@ lemma eulerMascheroni_sum_partial : ∀ N, ∑ k ∈ Finset.range N, eulerMasche
     = (harmonic N : ℝ) - Real.log (N + 1) := by
   intro N
   induction' N with n ih
-  · simp [harmonic]
+  · simp
   · rw [Finset.sum_range_succ, ih, harmonic_succ]
     unfold eulerMascheroni_sum_inner
     push_cast
@@ -46,12 +46,13 @@ lemma eulerMascheroni_sum_partial : ∀ N, ∑ k ∈ Finset.range N, eulerMasche
     rw [h_log]
     ring_nf
 
-lemma eulerMascheroni_inner_bound : ∀ N, ∑ k ∈ Finset.range N, eulerMascheroni_sum_inner k ≤ 1 := by
+-- TODO: use Real.eulerMascheroniConstant_lt_two_thirds and Real.eulerMascheroniSeq_lt_eulerMascheroniConstant to get lower upper bound?
+lemma eulerMascheroni_sum_bound : ∀ N, ∑ k ∈ Finset.range N, eulerMascheroni_sum_inner k ≤ 1 := by
   intro N
   rw [eulerMascheroni_sum_partial N]
-  have h_lt := Real.eulerMascheroniSeq_lt_eulerMascheroniSeq' N 1
-  rw [Real.eulerMascheroniSeq'_one] at h_lt
-  unfold Real.eulerMascheroniSeq at h_lt
+  have := Real.eulerMascheroniSeq_lt_eulerMascheroniSeq' N 1
+  rw [Real.eulerMascheroniSeq'_one] at this
+  unfold Real.eulerMascheroniSeq at this
   linarith
 
 /-- the infinite sum is equal to `Real.eulerMascheroniConstant` -/
@@ -62,4 +63,4 @@ theorem eulerMascheroni_tsum :
   rw [Summable.hasSum_iff_tendsto_nat]
   · simp_rw [eulerMascheroni_sum_partial]
     exact Real.tendsto_eulerMascheroniSeq
-  · exact summable_of_sum_range_le eulerMascheroni_sum_inner_nonneg eulerMascheroni_inner_bound
+  · exact summable_of_sum_range_le eulerMascheroni_sum_inner_nonneg eulerMascheroni_sum_bound

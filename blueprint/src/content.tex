@@ -6,22 +6,27 @@
 % the current file can be a simple sequence of \input. Otherwise It
 % can start with a \section or \chapter for instance.
 
+\chapter{Euler's constant in infinite sum form. (Sondow (2005).)}
+
+(Note: The index of the inner summand in the Lean definition is shifted by one so the series can be expressed as a sum from $n=0$ to $\infty$ (so we can use "tsum" for cleaner proof).)
+
 \begin{lemma}[Nonnegativity of the inner sum]
   \label{lem:eulerMascheroni_inner_nonneg}
   \lean{EulerMascheroniInfiniteSum.eulerMascheroni_sum_inner_nonneg}
   \leanok
-  For every integer \(n \ge 1\),
-  \[
-    \frac{1}{n} - \ln\!\left(\frac{n+1}{n}\right) \ge 0.
-  \]
+  For every integer $n \ge 1$,
+  $$
+    \frac{1}{n} - \ln{\frac{n+1}{n}} \ge 0.
+  $$
 \end{lemma}
 
 \begin{proof}
-  The inequality \(\ln x \le x-1\) holds for all \(x>0\). Taking
-  \(x=\dfrac{n+1}{n}>0\) gives
-  \[
-    \ln\!\left(\frac{n+1}{n}\right) \le \frac{n+1}{n}-1 = \frac{1}{n}.
-  \]
+  \leanok
+  The inequality $\ln x \le x-1$ holds for all $x > 0$. Taking
+  $x=\frac{n+1}{n}$ gives
+  $$
+    \ln{\frac{n+1}{n}} \le \frac{n+1}{n}-1 = \frac{1}{n}.
+  $$
   Rearranging yields the stated nonnegativity.
 \end{proof}
 
@@ -29,35 +34,55 @@
   \label{lem:eulerMascheroni_tsum_partial}
   \lean{EulerMascheroniInfiniteSum.eulerMascheroni_sum_partial}
   \leanok
-  For every integer \(N \ge 1\),
-  \[
-    \sum_{n=1}^{N}\left(\frac{1}{n} - \ln\!\left(\frac{n+1}{n}\right)\right)
-    = H_{N} - \ln\!(N+1),
-  \]
-  where \(H_{N}=\sum_{n=1}^N \frac{1}{n}\) is the \(N\)-th harmonic number.
+  For every integer $N \ge 1$,
+  $$
+    \sum_{n=1}^{N}\left(\frac{1}{n} - \ln{\frac{n+1}{n}}\right)
+    = H_{N} - \ln{\left(N+1\right)},
+  $$
+  where $H_{N}=\sum_{n=1}^N \frac{1}{n}$ is the $N$-th harmonic number.
 \end{lemma}
 
 \begin{proof}
+  \leanok
   Split the sum:
-  \[
-    \sum_{n=1}^{N}\frac{1}{n} - \sum_{n=1}^{N}\ln\!\left(\frac{n+1}{n}\right).
-  \]
-  The first term is \(H_{N}\). The second term telescopes:
-  \[
-    \sum_{n=1}^{N}\left(\ln(n+1)-\ln n\right)=\ln(N+1)-\ln 1=\ln(N+1).
-  \]
+  $$
+    \sum_{n=1}^{N}\frac{1}{n} - \sum_{n=1}^{N}\ln{\frac{n+1}{n}}.
+  $$
+  The first term is $H_{N}$. The second term telescopes:
+  $$
+    \sum_{n=1}^{N}\left(\ln{n+1}-\ln n\right)=\ln{\left(N+1\right)}-\ln 1=\ln{\left(N+1\right)}.
+  $$
   Combining gives the claimed identity.
+\end{proof}
+
+\begin{theorem}[Upper bound of the sum]
+  \label{thm:eulerMascheroni_sum_bound}
+  \lean{EulerMascheroniInfiniteSum.eulerMascheroni_sum_bound}
+  \leanok
+  For every integer $N \ge 1$,
+  $$
+    \sum_{n=1}^{N}\left(\frac{1}{n} - \ln{\frac{n+1}{n}}\right) \leq 1
+  $$
+\end{theorem}
+
+\begin{proof}
+  \leanok
+  \uses{lem:eulerMascheroni_tsum_partial}
+  We use the results from the previous lemma, and get the sum as $H_N - \ln{N + 1}$. This is the same as mathlib's "Real.eulerMascheroniSeq" we can use the results from mathlib. (Alternately, we can use the fact that the upper bound of $\gamma$ is $2/3$ and $\gamma < H_{N} - \ln{N+1}$ to get a stricter results?)
 \end{proof}
 
 \begin{theorem}[Sondow 2005 (2) (Infinite sum)]
   \label{thm:eulerMascheroni_tsum}
   \lean{EulerMascheroniInfiniteSum.eulerMascheroni_tsum}
-  \uses{lem:eulerMascheroni_inner_nonneg, lem:eulerMascheroni_tsum_partial}
   \leanok
-  \[
-    \gamma = \lim_{n \to \infty}\!\left(H_{n} - \ln n\right)
-      = \sum_{n=1}^{\infty}\left(\frac{1}{n} - \ln\!\left(\frac{n+1}{n}\right)\right).
-  \]
-  (Note: in the Lean definition the index of the inner summand is shifted
-  by one so the series is expressed as a sum from \(n=0\) to \(\infty\).)
+  $$
+    \gamma = \lim_{n \to \infty}{\left(H_{n} - \ln n\right)}
+      = \sum_{n=1}^{\infty}\left(\frac{1}{n} - \ln{\frac{n+1}{n}}\right).
+  $$
 \end{theorem}
+
+\begin{proof}
+  \uses{lem:eulerMascheroni_inner_nonneg, lem:eulerMascheroni_tsum_partial, thm:eulerMascheroni_sum_bound}
+  \leanok
+  By combining all of the previous results (plus the fact that $H_n - \ln{n+1}$ that we got from partial sum is basically the same as mathlib's one), we can conclude that the infinite sum is equal to $\lim_{n \to \infty}\left(H_{n} - \ln n\right)$
+\end{proof}
