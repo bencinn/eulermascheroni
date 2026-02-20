@@ -6,4 +6,12 @@
 % the current file can be a simple sequence of \input. Otherwise It
 % can start with a \section or \chapter for instance.
 
-\lean{EulerMascheroni.Example.one_plus_one_equal_two}
+\begin{theorem}[Sondow 2005 (2) (Infinite sum)]
+  \label{thm:eulerMascheroni_tsum}
+  \lean{eulerMascheroni_tsum}
+  \leanok
+  $$
+  \gamma = \sum^{\infty}_{n=1}{\left(\frac{1}{n} - \ln{\frac{n+1}{n}}\right)}
+  $$
+  (Note: in the lean definition we shift the $n$ in the inner sum $\frac{1}{n} - \ln{\frac{n+1}{n}}$ by one so we can sum from $n=0$ to $\infty$
+\end{theorem}
