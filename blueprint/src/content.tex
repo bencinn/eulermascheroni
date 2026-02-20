@@ -6,9 +6,24 @@
 % the current file can be a simple sequence of \input. Otherwise It
 % can start with a \section or \chapter for instance.
 
+\begin{lemma}[Nonnegativeness of the inner sum]
+  \label{lem:eulerMascheroni_inner_nonneg}
+  \lean{eulerMascheroni_sum_inner_nonneg}
+  \leanok
+  $\frac{1}{n} - \ln{\frac{n+1}{n}} \geq 0$ for all $n$ greater than zero.
+\end{lemma}
+
+\begin{lemma}[Partial sum of the infinite sum]
+  \label{lem:eulerMascheroni_tsum_partial}
+  \lean{eulerMascheroni_sum_partial}
+  \leanok
+  $\sum^{N}_{n=1}{\left(\frac{1}{n} - \ln{\frac{n+1}{n}}\right)} = H_n - \ln{\left( N+1 \right)}$ for all $N$ greater than 0
+\end{lemma}
+
 \begin{theorem}[Sondow 2005 (2) (Infinite sum)]
   \label{thm:eulerMascheroni_tsum}
   \lean{eulerMascheroni_tsum}
+  \uses{lem:eulerMascheroni_inner_nonneg, lem:eulerMascheroni_tsum_partial}
   \leanok
   $$
   \gamma = \sum^{\infty}_{n=1}{\left(\frac{1}{n} - \ln{\frac{n+1}{n}}\right)}
