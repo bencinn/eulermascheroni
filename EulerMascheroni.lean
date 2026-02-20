@@ -1,1 +1,1 @@
-import EulerMascheroni.Example
+import EulerMascheroni.EulerMascheroniInfiniteSum
