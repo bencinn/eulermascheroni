@@ -6,26 +6,47 @@
 % the current file can be a simple sequence of \input. Otherwise It
 % can start with a \section or \chapter for instance.
 
-\begin{lemma}[Nonnegativeness of the inner sum]
+\begin{lemma}[Nonnegativity of the inner sum]
   \label{lem:eulerMascheroni_inner_nonneg}
   \lean{eulerMascheroni_sum_inner_nonneg}
   \leanok
-  $\frac{1}{n} - \ln{\frac{n+1}{n}} \geq 0$ for all $n$ greater than zero.
+  For every integer \(n \ge 1\),
+  \[
+    \frac{1}{n} - \ln\!\left(\frac{n+1}{n}\right) \ge 0.
+  \]
 \end{lemma}
 
 \begin{proof}
-  Since $\ln x \leq x - 1$ for all $x$ greater than $0$ (see "log_le_sub_one_of_pos" in mathlib4), and $\frac{n+1}{n} \gt 0$ for all $n$ greater than $0$, we can rewrite as $\frac{1}{n} \geq \ln{\frac{n+1}{n}} \geq \frac{n+1}{n} - 1 = \frac{1}{n}$.
+  The inequality \(\ln x \le x-1\) holds for all \(x>0\). Taking
+  \(x=\dfrac{n+1}{n}>0\) gives
+  \[
+    \ln\!\left(\frac{n+1}{n}\right) \le \frac{n+1}{n}-1 = \frac{1}{n}.
+  \]
+  Rearranging yields the stated nonnegativity.
 \end{proof}
 
 \begin{lemma}[Partial sum of the infinite sum]
   \label{lem:eulerMascheroni_tsum_partial}
   \lean{eulerMascheroni_sum_partial}
   \leanok
-  $\sum^{N}_{n=1}{\left(\frac{1}{n} - \ln{\frac{n+1}{n}}\right)} = H_n - \ln{\left( N+1 \right)}$ for all $N$ greater than 0
+  For every integer \(N \ge 1\),
+  \[
+    \sum_{n=1}^{N}\left(\frac{1}{n} - \ln\!\left(\frac{n+1}{n}\right)\right)
+    = H_{N} - \ln\!(N+1),
+  \]
+  where \(H_{N}=\sum_{n=1}^N \frac{1}{n}\) is the \(N\)-th harmonic number.
 \end{lemma}
 
 \begin{proof}
-  We can separate the sum into $\sum^{N}_{n=1}{\frac{1}{n}}$ (which is $H_n$) and $-\sum^{N}_{n=1}{\left(\ln{\frac{n+1}{n}}\right)} = -\sum^{N}_{n=1}{\ln{n+1} - \ln{n}}$, which is a telescopic sum that results in $-(\ln{N+1} - \ln{1}) = -\ln{N+1}$.
+  Split the sum:
+  \[
+    \sum_{n=1}^{N}\frac{1}{n} - \sum_{n=1}^{N}\ln\!\left(\frac{n+1}{n}\right).
+  \]
+  The first term is \(H_{N}\). The second term telescopes:
+  \[
+    \sum_{n=1}^{N}\left(\ln(n+1)-\ln n\right)=\ln(N+1)-\ln 1=\ln(N+1).
+  \]
+  Combining gives the claimed identity.
 \end{proof}
 
 \begin{theorem}[Sondow 2005 (2) (Infinite sum)]
@@ -33,8 +54,10 @@
   \lean{eulerMascheroni_tsum}
   \uses{lem:eulerMascheroni_inner_nonneg, lem:eulerMascheroni_tsum_partial}
   \leanok
-  $$
-  \gamma = \lim_{n \to \infty}{H_n - \ln{n}} = \sum^{\infty}_{n=1}{\left(\frac{1}{n} - \ln{\frac{n+1}{n}}\right)}
-  $$
-  (Note: in the lean definition we shift the $n$ in the inner sum $\frac{1}{n} - \ln{\frac{n+1}{n}}$ by one so we can sum from $n=0$ to $\infty$
+  \[
+    \gamma = \lim_{n \to \infty}\!\left(H_{n} - \ln n\right)
+      = \sum_{n=1}^{\infty}\left(\frac{1}{n} - \ln\!\left(\frac{n+1}{n}\right)\right).
+  \]
+  (Note: in the Lean definition the index of the inner summand is shifted
+  by one so the series is expressed as a sum from \(n=0\) to \(\infty\).)
 \end{theorem}
