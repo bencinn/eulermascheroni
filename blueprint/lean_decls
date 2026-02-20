@@ -1,3 +1,3 @@
-eulerMascheroni_sum_inner_nonneg
-eulerMascheroni_sum_partial
-eulerMascheroni_tsum
+EulerMascheroniInfiniteSum.eulerMascheroni_sum_inner_nonneg
+EulerMascheroniInfiniteSum.eulerMascheroni_sum_partial
+EulerMascheroniInfiniteSum.eulerMascheroni_tsum
