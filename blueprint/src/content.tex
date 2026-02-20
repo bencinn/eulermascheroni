@@ -8,7 +8,7 @@
 
 \begin{lemma}[Nonnegativity of the inner sum]
   \label{lem:eulerMascheroni_inner_nonneg}
-  \lean{eulerMascheroni_sum_inner_nonneg}
+  \lean{EulerMascheroniInfiniteSum.eulerMascheroni_sum_inner_nonneg}
   \leanok
   For every integer \(n \ge 1\),
   \[
@@ -27,7 +27,7 @@
 
 \begin{lemma}[Partial sum of the infinite sum]
   \label{lem:eulerMascheroni_tsum_partial}
-  \lean{eulerMascheroni_sum_partial}
+  \lean{EulerMascheroniInfiniteSum.eulerMascheroni_sum_partial}
   \leanok
   For every integer \(N \ge 1\),
   \[
@@ -51,7 +51,7 @@
 
 \begin{theorem}[Sondow 2005 (2) (Infinite sum)]
   \label{thm:eulerMascheroni_tsum}
-  \lean{eulerMascheroni_tsum}
+  \lean{EulerMascheroniInfiniteSum.eulerMascheroni_tsum}
   \uses{lem:eulerMascheroni_inner_nonneg, lem:eulerMascheroni_tsum_partial}
   \leanok
   \[
