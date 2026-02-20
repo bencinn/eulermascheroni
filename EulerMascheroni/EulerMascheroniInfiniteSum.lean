@@ -2,11 +2,21 @@ import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.NumberTheory.Harmonic.EulerMascheroni
 import Mathlib.Tactic
 
+/-!
+# Euler–Mascheroni Constant as an Infinite Sum
+
+This file proves that the Euler–Mascheroni constant can be expressed as
+the infinite sum
+
+∑' n, (1 / (n + 1) - log ((n + 2) / (n + 1))).
+
+We conclude that the series sums to `Real.eulerMascheroniConstant`.
+-/
 namespace EulerMascheroniInfiniteSum
 
 open Filter
 
-/- shift because fuck n=0 -/
+/-- Inner sum of the infinite sum definition -/
 noncomputable def eulerMascheroni_sum_inner (n : ℕ) :=
   1 / ((n + 1) : ℝ) - Real.log ((n + 2) / (n + 1))
 
@@ -44,6 +54,7 @@ lemma eulerMascheroni_inner_bound : ∀ N, ∑ k ∈ Finset.range N, eulerMasche
   unfold Real.eulerMascheroniSeq at h_lt
   linarith
 
+/-- the infinite sum is equal to `Real.eulerMascheroniConstant` -/
 theorem eulerMascheroni_tsum :
   ∑' n, eulerMascheroni_sum_inner n = Real.eulerMascheroniConstant := by
   apply HasSum.tsum_eq
