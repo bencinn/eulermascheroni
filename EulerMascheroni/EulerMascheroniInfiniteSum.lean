@@ -31,7 +31,7 @@ lemma eulerMascheroni_sum_inner_nonneg : ∀ n, 0 ≤ eulerMascheroni_sum_inner 
   have h_pos' : (0 : ℝ) < n + 1 := by positivity
   rw [mul_comm] at h_log
   rw [← le_div_iff₀ h_pos'] at h_log
-  linarith
+  grind
 
 lemma eulerMascheroni_sum_partial : ∀ N, ∑ k ∈ Finset.range N, eulerMascheroni_sum_inner k
     = (harmonic N : ℝ) - Real.log (N + 1) := by
