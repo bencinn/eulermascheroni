@@ -100,6 +100,7 @@
 
 \begin{proof}
   \uses{thm:eulerMascheroni_tsum}
+  \leanok
   The prove is idk go wolfram alpha and see that \begin{verbatim}integral_n^(1 + n) 1/t dt = log(n + 1) - log(n) for Re(n)>0 ∨ Re(n)<-1 ∨ n not element R\end{verbatim} or smth.
 \end{proof}
 
@@ -117,6 +118,8 @@
 
 \begin{lemma}[Sondow's Term-wise Bound]
   \label{thm:eulerMascheroni_int_sum_bound}
+  \lean{EulerMascheroniAntisymmetric.eulerMascheroni_int_bound}
+  \leanok
   For any real $x \in [1, 2]$ and natural number $n \ge 1$,
   $$
     0 \le \frac{1}{n^x} - \int_n^{n+1}{\frac{dt}{t^x}} \le \frac{1}{n^2}
