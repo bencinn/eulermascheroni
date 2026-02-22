@@ -50,7 +50,7 @@
   $$
   The first term is $H_{N}$. The second term telescopes:
   $$
-    \sum_{n=1}^{N}\left(\ln{n+1}-\ln n\right)=\ln{\left(N+1\right)}-\ln 1=\ln{\left(N+1\right)}.
+    \sum_{n=1}^{N}\left(\ln(n+1)-\ln n\right)=\ln{\left(N+1\right)}-\ln 1=\ln{\left(N+1\right)}.
   $$
   Combining gives the claimed identity.
 \end{proof}
@@ -68,7 +68,7 @@
 \begin{proof}
   \leanok
   \uses{lem:eulerMascheroni_tsum_partial}
-  We use the results from the previous lemma, and get the sum as $H_N - \ln{N + 1}$. This is the same as mathlib's "Real.eulerMascheroniSeq" we can use the results from mathlib. (Alternately, we can use the fact that the upper bound of $\gamma$ is $2/3$ and $\gamma < H_{N} - \ln{N+1}$ to get a stricter results?)
+  We use the results from the previous lemma, and get the sum as $H_N - \ln(N + 1)$. This is the same as mathlib's "Real.eulerMascheroniSeq" we can use the results from mathlib. (Alternately, we can use the fact that the upper bound of $\gamma$ is $2/3$ and $\gamma < H_{N} - \ln (N+1)$ to get a stricter results?)
 \end{proof}
 
 \begin{theorem}[Sondow 2005 (2) (Infinite sum)]
@@ -84,5 +84,84 @@
 \begin{proof}
   \uses{lem:eulerMascheroni_inner_nonneg, lem:eulerMascheroni_tsum_partial, thm:eulerMascheroni_sum_bound}
   \leanok
-  By combining all of the previous results (plus the fact that $H_n - \ln{n+1}$ that we got from partial sum is basically the same as mathlib's one), we can conclude that the infinite sum is equal to $\lim_{n \to \infty}\left(H_{n} - \ln n\right)$
+  By combining all of the previous results (plus the fact that $H_n - \ln(n+1)$ that we got from partial sum is basically the same as mathlib's one), we can conclude that the infinite sum is equal to $\lim_{n \to \infty}\left(H_{n} - \ln n\right)$
+\end{proof}
+
+\chapter{Euler's constant in antisymmetric form. (Sondow (1998).)}
+
+\begin{lemma}[Euler's Constant as an Integral Series]
+  \label{thm:eulerMascheroni_int_series}
+  \lean{EulerMascheroniAntisymmetric.eulerMascheroni_int_series}
+  \leanok
+  $$
+    \gamma = \lim_{n \to \infty}{H_n - \ln(n+1)} = \sum_{n=1}^{\infty}{\left(\frac{1}{n} - \int_n^{n+1}{\frac{dt}{t}}\right)}
+  $$
+\end{lemma}
+
+\begin{proof}
+  \uses{thm:eulerMascheroni_tsum}
+  The prove is idk go wolfram alpha and see that \begin{verbatim}integral_n^(1 + n) 1/t dt = log(n + 1) - log(n) for Re(n)>0 ∨ Re(n)<-1 ∨ n not element R\end{verbatim} or smth.
+\end{proof}
+
+\begin{lemma}[Integral Equivalence of the Antisymmetric Series]
+  \label{thm:eulerMascheroni_antisymm_equiv}
+  $$
+    \lim_{x \to 1^+}{\sum_{n=1}^{\infty}{\left( \frac{1}{n^x} - \frac{1}{x^n} \right)}} = 
+      \lim_{x \to 1^+}{\sum_{n=1}^{\infty}{\left(\frac{1}{n^x} - \int_n^{n+1}{\frac{dt}{t^x}}\right)}}
+  $$
+\end{lemma}
+
+\begin{proof}
+  I don't know
+\end{proof}
+
+\begin{lemma}[Sondow's Term-wise Bound]
+  \label{thm:eulerMascheroni_int_sum_bound}
+  For any real $x \in [1, 2]$ and natural number $n \ge 1$,
+  $$
+    0 \le \frac{1}{n^x} - \int_n^{n+1}{\frac{dt}{t^x}} \le \frac{1}{n^2}
+  $$
+\end{lemma}
+
+\begin{proof}
+  idk go to chatgpt and use the free wolfram mathematica (nlp edition) to verify it.
+\end{proof}
+
+\begin{lemma}[Uniform Convergence of the Integral Series]
+  \label{thm:eulerMascheroni_uniform_conv}
+  The series 
+  $$
+    \sum_{n=1}^{\infty}{\left(\frac{1}{n^x} - \int_n^{n+1}{\frac{dt}{t^x}}\right)}
+  $$
+  converges uniformly for $x \in [1, 2]$.
+\end{lemma}
+
+\begin{proof}
+  \uses{thm:eulerMascheroni_int_sum_bound}
+  i don't know (translation: use the Weierstrass M-test to verify.)
+\end{proof}
+
+\begin{lemma}[Equivalence of the Antisymmetric Series and the Limit Definition]
+  \label{thm:eulerMascheroni_antisymm_equiv_limit}
+  $$
+    \lim_{n \to \infty}{\left( H_n - \ln(n+1) \right)} = \lim_{x \to 1^+}{\sum_{n=1}^{\infty}{\left( \frac{1}{n^x} - \frac{1}{x^n} \right)}}
+  $$
+\end{lemma}
+
+\begin{proof}
+  \uses{thm:eulerMascheroni_int_series, thm:eulerMascheroni_antisymm_equiv, thm:eulerMascheroni_uniform_conv}
+  idk
+  Because the series converges uniformly, we can swap the limit and the infinite sum. Evaluating the limit results in the integral series.
+\end{proof}
+
+\begin{theorem}[Limit of the difference between p-series and geometric series]
+  \label{thm:eulerMascheroni_antisymm_form}
+  $$
+   \gamma = \lim_{x \to 1^+}{\sum_{n=1}^{\infty}{\left( \frac{1}{n^x} - \frac{1}{x^n} \right)}}
+  $$
+\end{theorem}
+
+\begin{proof}
+  \uses{thm:eulerMascheroni_antisymm_equiv_limit}
+  The proof is obvious for those with the eyes to see.
 \end{proof}
