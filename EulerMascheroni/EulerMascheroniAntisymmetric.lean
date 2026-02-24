@@ -1,10 +1,7 @@
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.NumberTheory.Harmonic.EulerMascheroni
-import Mathlib.Tactic
 import Mathlib.NumberTheory.Harmonic.ZetaAsymp
 import EulerMascheroni.EulerMascheroniInfiniteSum
-import Mathlib.Analysis.Calculus.MeanValue
-import Mathlib.Analysis.SpecialFunctions.Pow.Real
 
 /-!
 # Antisymmetric definition of the Euler–Mascheroni Constant
