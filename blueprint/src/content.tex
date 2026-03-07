@@ -127,7 +127,14 @@
 \end{lemma}
 
 \begin{proof}
-  idk go to chatgpt and use the free wolfram mathematica (nlp edition) to verify it.
+  \leanok
+  From the paper it is...
+  $$
+    \begin{aligned}
+    0 &< \frac{1}{n^x} - \int_n^{n+1} \frac{dt}{t^x} = \int_n^{n+1} \left( \frac{1}{n^x} - \frac{1}{t^x} \right) dt = \int_n^{n+1} \left( \int_n^t x u^{-x-1} \, du \right) dt \\
+    &\leq x n^{-x-1} \int_n^{n+1} \left( \int_n^t \, du \right) dt = \frac{1}{2} x n^{-x-1} \leq n^{-2}
+    \end{aligned}
+  $$
 \end{proof}
 
 \begin{lemma}[Uniform Convergence of the Integral Series]
