@@ -14,6 +14,7 @@ namespace EulerMascheroniAntisymmetric
 open Filter Topology MeasureTheory Set
 
 /-- the inner of the integral series (off by one) -/
+noncomputable def eulerMascheroni_inner_int_pow_series (n : ℕ) (x : ℝ) := 1/((n+1)^x) - ∫ t in (n+1)..(n+2), 1/(t^x)
 noncomputable def eulerMascheroni_inner_int_series (n : ℕ) := 1/(n+1) - ∫ t in (n+1)..(n+2), (1/t)
 
 lemma eulerMascheroni_int_series : Real.eulerMascheroniConstant = ∑' n, eulerMascheroni_inner_int_series n := by
@@ -133,4 +134,18 @@ lemma eulerMascheroni_int_bound (n : ℕ) (x : ℝ) (hx_lo : 1 ≤ x) (hx_hi : x
   0 ≤ 1/((n+1)^x) - ∫ t in (n+1)..(n+2), 1/(t^x) ∧ 1/((n+1)^x) - ∫ t in (n+1)..(n+2), 1/(t^x) ≤ 1/((n+1)^2) := by
     exact ⟨eulerMascheroni_int_lower_bound n x hx_lo, eulerMascheroni_int_upper_bound n x hx_lo hx_hi⟩
 
-#check eulerMascheroni_int_lower_bound
+lemma eulerMascheroni_int_uniform : 
+  TendstoUniformlyOn (fun N x => ∑ n ∈ Finset.range N, eulerMascheroni_inner_int_pow_series n x)
+    (fun x => ∑' (n : ℕ), eulerMascheroni_inner_int_pow_series n x) atTop (Set.Icc 1 2) := by
+      have hu : Summable (fun n : ℕ => 1 / ((n + 1 : ℝ) ^ 2)) := by
+        have : (fun n : ℕ => 1 / ((n + 1 : ℝ) ^ 2)) = fun n : ℕ => (fun m : ℕ => 1 / (m : ℝ) ^ 2) (n + 1) := by
+          ext n; push_cast; rfl
+        rw [this]
+        exact (summable_nat_add_iff 1).mpr (Real.summable_one_div_nat_pow.mpr (by linarith))
+      refine tendstoUniformlyOn_tsum_nat hu ?_
+      intro n x hx
+      have ⟨h_lower, h_upper⟩ := eulerMascheroni_int_bound n x hx.1 hx.2
+      unfold eulerMascheroni_inner_int_pow_series
+      rw [Real.norm_of_nonneg h_lower]
+      exact h_upper
+

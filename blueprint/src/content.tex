@@ -139,6 +139,8 @@
 
 \begin{lemma}[Uniform Convergence of the Integral Series]
   \label{thm:eulerMascheroni_uniform_conv}
+  \lean{EulerMascheroniAntisymmetric.eulerMascheroni_int_uniform}
+  \leanok
   The series 
   $$
     \sum_{n=1}^{\infty}{\left(\frac{1}{n^x} - \int_n^{n+1}{\frac{dt}{t^x}}\right)}
@@ -148,7 +150,8 @@
 
 \begin{proof}
   \uses{thm:eulerMascheroni_int_sum_bound}
-  i don't know (translation: use the Weierstrass M-test to verify.)
+  \leanok
+  Use the Weierstrass M-test and the bound to verify that the series converges.
 \end{proof}
 
 \begin{lemma}[Equivalence of the Antisymmetric Series and the Limit Definition]
