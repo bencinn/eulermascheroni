@@ -1,1 +1,2 @@
 import EulerMascheroni.EulerMascheroniInfiniteSum
+import EulerMascheroni.EulerMascheroniAntisymmetric
