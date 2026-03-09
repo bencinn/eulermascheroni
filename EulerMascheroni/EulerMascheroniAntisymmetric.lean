@@ -14,15 +14,19 @@ namespace EulerMascheroniAntisymmetric
 open Filter Topology MeasureTheory Set
 
 /-- the inner of the integral series (off by one) -/
-noncomputable def eulerMascheroni_inner_int_pow_series (n : ℕ) (x : ℝ) := 1/((n+1)^x) - ∫ t in (n+1)..(n+2), 1/(t^x)
-noncomputable def eulerMascheroni_inner_int_series (n : ℕ) := 1/(n+1) - ∫ t in (n+1)..(n+2), (1/t)
+noncomputable def eulerMascheroni_inner_int_series (n : ℕ) (x : ℝ) := 1/((n+1)^x) - ∫ t in (n+1)..(n+2), 1/(t^x)
 
-lemma eulerMascheroni_int_series : Real.eulerMascheroniConstant = ∑' n, eulerMascheroni_inner_int_series n := by
+lemma eulerMascheroni_inner_int_pow_series_one (n : ℕ) :
+  eulerMascheroni_inner_int_series n 1 = 1/(n+1) - ∫ t in (n+1)..(n+2), (1/t) := by
+  unfold eulerMascheroni_inner_int_series
+  simp only [Real.rpow_one]
+
+lemma eulerMascheroni_int_series : Real.eulerMascheroniConstant = ∑' n, eulerMascheroni_inner_int_series n 1 := by
   rw [<-EulerMascheroniInfiniteSum.eulerMascheroni_tsum]
-  have this : ∀ (x : ℕ), EulerMascheroniInfiniteSum.eulerMascheroni_sum_inner x = eulerMascheroni_inner_int_series x := by
-    unfold EulerMascheroniInfiniteSum.eulerMascheroni_sum_inner eulerMascheroni_inner_int_series
+  have this : ∀ (x : ℕ), EulerMascheroniInfiniteSum.eulerMascheroni_sum_inner x = eulerMascheroni_inner_int_series x 1 := by
+    unfold EulerMascheroniInfiniteSum.eulerMascheroni_sum_inner
     intro x
-    rw [integral_one_div]
+    rw [eulerMascheroni_inner_int_pow_series_one, integral_one_div]
     intro h
     rw [mem_uIcc] at h
     cases h <;> linarith
@@ -34,8 +38,9 @@ lemma h_const_int (n : ℕ) (x : ℝ) : ∫ _ in (n + 1)..(n + 2), 1/((n + 1 : �
 
 /- since we offset by one already, we can just -/
 lemma eulerMascheroni_int_lower_bound (n : ℕ) (x : ℝ) (hx_lo : 1 ≤ x) :
-  0 ≤ 1/((n+1)^x) - ∫ t in (n+1)..(n+2), 1/(t^x)
+  0 ≤ eulerMascheroni_inner_int_series n x
   := by
+    unfold eulerMascheroni_inner_int_series
     rw [<-h_const_int]
     apply sub_nonneg_of_le
     have h_bounds : n + 2 = (n + 1 : ℝ) + 1 := by ring
@@ -56,7 +61,8 @@ lemma eulerMascheroni_int_lower_bound (n : ℕ) (x : ℝ) (hx_lo : 1 ≤ x) :
       · positivity
 
 lemma eulerMascheroni_int_upper_bound (n : ℕ) (x : ℝ) (hx_lo : 1 ≤ x) (hx_hi : x ≤ 2) :
-  1/((n+1)^x) - ∫ t in (n+1)..(n+2), 1/(t^x) ≤ 1/((n+1)^2) := by
+  eulerMascheroni_inner_int_series n x ≤ 1/((n+1)^2) := by
+    unfold eulerMascheroni_inner_int_series
     rw [<-h_const_int]
     have h_bounds : n + 2 = (n + 1 : ℝ) + 1 := by ring
     rw [h_bounds]
@@ -131,12 +137,12 @@ lemma eulerMascheroni_int_upper_bound (n : ℕ) (x : ℝ) (hx_lo : 1 ≤ x) (hx_
           _ = 1 / c ^ 2 := by rw [Real.rpow_neg (by positivity), Real.rpow_two]; ring
 
 lemma eulerMascheroni_int_bound (n : ℕ) (x : ℝ) (hx_lo : 1 ≤ x) (hx_hi : x ≤ 2) :
-  0 ≤ 1/((n+1)^x) - ∫ t in (n+1)..(n+2), 1/(t^x) ∧ 1/((n+1)^x) - ∫ t in (n+1)..(n+2), 1/(t^x) ≤ 1/((n+1)^2) := by
+  0 ≤ eulerMascheroni_inner_int_series n x ∧ eulerMascheroni_inner_int_series n x ≤ 1/((n+1)^2) := by
     exact ⟨eulerMascheroni_int_lower_bound n x hx_lo, eulerMascheroni_int_upper_bound n x hx_lo hx_hi⟩
 
 lemma eulerMascheroni_int_uniform : 
-  TendstoUniformlyOn (fun N x => ∑ n ∈ Finset.range N, eulerMascheroni_inner_int_pow_series n x)
-    (fun x => ∑' (n : ℕ), eulerMascheroni_inner_int_pow_series n x) atTop (Set.Icc 1 2) := by
+  TendstoUniformlyOn (fun N x => ∑ n ∈ Finset.range N, eulerMascheroni_inner_int_series n x)
+    (fun x => ∑' (n : ℕ), eulerMascheroni_inner_int_series n x) atTop (Set.Icc 1 2) := by
       have hu : Summable (fun n : ℕ => 1 / ((n + 1 : ℝ) ^ 2)) := by
         have : (fun n : ℕ => 1 / ((n + 1 : ℝ) ^ 2)) = fun n : ℕ => (fun m : ℕ => 1 / (m : ℝ) ^ 2) (n + 1) := by
           ext n; push_cast; rfl
@@ -145,7 +151,5 @@ lemma eulerMascheroni_int_uniform :
       refine tendstoUniformlyOn_tsum_nat hu ?_
       intro n x hx
       have ⟨h_lower, h_upper⟩ := eulerMascheroni_int_bound n x hx.1 hx.2
-      unfold eulerMascheroni_inner_int_pow_series
       rw [Real.norm_of_nonneg h_lower]
       exact h_upper
-
